@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Care — داشبورد الطالب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --teal-dark:   #0F6E56;
+      --purple:      #7F77DD;
+      --purple-light:#EEEDFE;
+      --purple-dark: #534AB7;
+      --bg:          #ffffff;
+      --bg-secondary:#F7F9F8;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --border:      rgba(0,0,0,0.08);
+      --shadow:      0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: var(--teal);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar-logo span { font-size: 16px; font-weight: 700; color: var(--teal-dark); }
+
+    .nav-section {
+      font-size: 11px; font-weight: 700;
+      color: var(--text-muted);
+      padding: 16px 16px 6px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; margin: 2px 8px;
+      font-size: 14px; font-weight: 500;
+      color: var(--text-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .nav-item:hover { background: var(--bg-secondary); color: var(--text); }
+    .nav-item.active { background: var(--teal-light); color: var(--teal-dark); }
+    .nav-item.active i { color: var(--teal-dark); }
+    .nav-item i { font-size: 18px; }
+
+    .sidebar-footer {
+      margin-top: auto;
+      padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .user-row { display: flex; align-items: center; gap: 10px; }
+    .user-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--purple-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--purple-dark);
+    }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--text-muted); }
+    .logout-btn {
+      margin-right: auto; background: none; border: none;
+      color: var(--text-muted); cursor: pointer; font-size: 18px;
+      padding: 4px;
+    }
+    .logout-btn:hover { color: #E65100; }
+
+    /* ── MAIN ── */
+    .main { padding: 28px; overflow: auto; }
+
+    .top-bar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .top-bar h1 { font-size: 20px; font-weight: 700; }
+    .top-bar p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer; border: none; transition: all 0.15s;
+      text-decoration: none;
+    }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-dark); }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .stat-icon { font-size: 22px; margin-bottom: 10px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-val { font-size: 22px; font-weight: 700; }
+    .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── GRID ── */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .card-title {
+      font-size: 14px; font-weight: 700;
+      margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-title a {
+      font-size: 12px; color: var(--teal);
+      text-decoration: none; font-weight: 500;
+      cursor: pointer;
+    }
+
+    /* ── SESSION ITEMS ── */
+    .session-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .session-item:last-child { border: none; padding-bottom: 0; }
+    .session-av {
+      width: 38px; height: 38px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .session-info { flex: 1; }
+    .session-name { font-size: 13px; font-weight: 600; }
+    .session-time { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── BADGES ── */
+    .badge {
+      font-size: 11px; padding: 3px 10px;
+      border-radius: 20px; font-weight: 600;
+    }
+    .badge-green  { background: var(--teal-light);   color: var(--teal-dark); }
+    .badge-orange { background: #FFF3E0;              color: #E65100; }
+    .badge-purple { background: var(--purple-light);  color: var(--purple-dark); }
+
+    /* ── MOOD BARS ── */
+    .mood-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .mood-row:last-child { border: none; }
+    .mood-day { width: 48px; color: var(--text-muted); font-size: 12px; }
+    .mood-bar-wrap {
+      flex: 1; background: var(--bg-secondary);
+      border-radius: 4px; height: 8px; overflow: hidden;
+    }
+    .mood-bar { height: 100%; border-radius: 4px; }
+    .mood-val { font-size: 12px; font-weight: 600; color: var(--text-muted); width: 20px; }
+
+    /* ── TIPS ── */
+    .tip-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .tip-item:last-child { border: none; padding-bottom: 0; }
+    .tip-icon {
+      width: 30px; height: 30px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tip-text { font-weight: 600; line-height: 1.4; }
+    .tip-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a class="sidebar-logo" href="index.html">
+      <div class="logo-icon"><i class="ti ti-brain" style="color:#fff;font-size:18px"></i></div>
+      <span>Student Care</span>
+    </a>
+
+    <div style="padding: 8px 0;">
+      <a class="nav-item active" href="dashboard-student.html"><i class="ti ti-home"></i> الرئيسية</a>
+      <a class="nav-item" href="#"><i class="ti ti-calendar"></i> جلساتي</a>
+      <a class="nav-item" href="book-session.html"><i class="ti ti-clock"></i> احجز موعد</a>
+      <a class="nav-item" href="#"><i class="ti ti-message"></i> الرسائل</a>
+
+      <div class="nav-section">أدوات</div>
+      <a class="nav-item" href="#"><i class="ti ti-heart"></i> تمارين اليقظة</a>
+      <a class="nav-item" href="#"><i class="ti ti-chart-bar"></i> تقدمي</a>
+      <a class="nav-item" href="#"><i class="ti ti-file-text"></i> تقاريري</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-av">أ م</div>
+        <div>
+          <div class="user-name">أحمد محمد</div>
+          <div class="user-role">طالب — هندسة</div>
+        </div>
+        <button class="logout-btn" onclick="window.location.href='login.html'" title="تسجيل خروج">
+          <i class="ti ti-logout"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top-bar">
+      <div>
+        <h1>أهلاً أحمد 👋</h1>
+        <p>الأحد، 1 يونيو 2025</p>
+      </div>
+      <a class="btn btn-primary" href="book-session.html">
+        <i class="ti ti-calendar-plus"></i> احجز جلسة جديدة
+      </a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-calendar-check" style="color:var(--teal)"></i></div>
+        <div class="stat-label">الجلسات المكتملة</div>
+        <div class="stat-val">8</div>
+        <div class="stat-sub">+2 هذا الشهر</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-clock" style="color:var(--purple)"></i></div>
+        <div class="stat-label">الجلسة القادمة</div>
+        <div class="stat-val">3 أيام</div>
+        <div class="stat-sub">الأربعاء 10:00 ص</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-heart" style="color:#E65100"></i></div>
+        <div class="stat-label">الحالة النفسية</div>
+        <div class="stat-val">مستقر</div>
+        <div class="stat-sub">تحسن ملحوظ</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-star" style="color:var(--teal)"></i></div>
+        <div class="stat-label">تمارين مكتملة</div>
+        <div class="stat-val">12</div>
+        <div class="stat-sub">هذا الأسبوع</div>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid2">
+      <!-- الجلسات القادمة -->
+      <div class="card">
+        <div class="card-title">الجلسات القادمة <a href="#">عرض الكل</a></div>
+        <div class="session-item">
+          <div class="session-av" style="background:var(--teal-light);color:var(--teal-dark)">س ج</div>
+          <div class="session-info">
+            <div class="session-name">د. سارة جينكينز</div>
+            <div class="session-time"><i class="ti ti-calendar" style="font-size:12px"></i> الأربعاء 4 يونيو — 10:00 ص</div>
+          </div>
+          <span class="badge badge-green">قادمة</span>
+        </div>
+        <div class="session-item">
+          <div class="session-av" style="background:var(--purple-light);color:var(--purple-dark)">م ث</div>
+          <div class="session-info">
+            <div class="session-name">د. ماركوس ثورن</div>
+            <div class="session-time"><i class="ti ti-calendar" style="font-size:12px"></i> الأحد 8 يونيو — 2:00 م</div>
+          </div>
+          <span class="badge badge-purple">مجدولة</span>
+        </div>
+        <div class="session-item">
+          <div class="session-av" style="background:#E8F5E9;color:#2E7D32">إ ت</div>
+          <div class="session-info">
+            <div class="session-name">د. إيزابيلا تشين</div>
+            <div class="session-time"><i class="ti ti-calendar" style="font-size:12px"></i> الخميس 12 يونيو — 11:00 ص</div>
+          </div>
+          <span class="badge badge-orange">بانتظار التأكيد</span>
+        </div>
+      </div>
+
+      <!-- مزاج الأسبوع -->
+      <div class="card">
+        <div class="card-title">مزاجي هذا الأسبوع <a href="#">التفاصيل</a></div>
+        <div class="mood-row"><div class="mood-day">الأحد</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:80%;background:var(--teal)"></div></div><div class="mood-val">8</div></div>
+        <div class="mood-row"><div class="mood-day">الاثنين</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:60%;background:var(--purple)"></div></div><div class="mood-val">6</div></div>
+        <div class="mood-row"><div class="mood-day">الثلاثاء</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:70%;background:var(--teal)"></div></div><div class="mood-val">7</div></div>
+        <div class="mood-row"><div class="mood-day">الأربعاء</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:50%;background:#E65100"></div></div><div class="mood-val">5</div></div>
+        <div class="mood-row"><div class="mood-day">الخميس</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:85%;background:var(--teal)"></div></div><div class="mood-val">9</div></div>
+        <div class="mood-row"><div class="mood-day">الجمعة</div><div class="mood-bar-wrap"><div class="mood-bar" style="width:75%;background:var(--teal)"></div></div><div class="mood-val">8</div></div>
+      </div>
+
+      <!-- توصيات الدكتور -->
+      <div class="card">
+        <div class="card-title">توصيات الدكتور <a href="#">عرض الكل</a></div>
+        <div class="tip-item">
+          <div class="tip-icon" style="background:var(--teal-light)"><i class="ti ti-brain" style="color:var(--teal-dark);font-size:16px"></i></div>
+          <div><div class="tip-text">تمرين اليقظة الذهنية (10 دقائق)</div><div class="tip-sub">يومياً قبل النوم</div></div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon" style="background:var(--purple-light)"><i class="ti ti-run" style="color:var(--purple-dark);font-size:16px"></i></div>
+          <div><div class="tip-text">ممارسة الرياضة الخفيفة</div><div class="tip-sub">3 مرات أسبوعياً</div></div>
+        </div>
+        <div class="tip-item">
+          <div class="tip-icon" style="background:#E8F5E9"><i class="ti ti-book" style="color:#2E7D32;font-size:16px"></i></div>
+          <div><div class="tip-text">قراءة 20 دقيقة يومياً</div><div class="tip-sub">للتخفيف من ضغط الدراسة</div></div>
+        </div>
+      </div>
+
+      <!-- آخر التقارير -->
+      <div class="card">
+        <div class="card-title">آخر التقارير <a href="#">عرض الكل</a></div>
+        <div class="session-item">
+          <div class="session-av" style="background:var(--teal-light);color:var(--teal-dark)">
+            <i class="ti ti-file-text" style="font-size:16px"></i>
+          </div>
+          <div class="session-info">
+            <div class="session-name">تقرير مايو 2025</div>
+            <div class="session-time">د. سارة جينكينز — 28 مايو</div>
+          </div>
+          <span class="badge badge-green">مستقر</span>
+        </div>
+        <div class="session-item">
+          <div class="session-av" style="background:var(--purple-light);color:var(--purple-dark)">
+            <i class="ti ti-file-text" style="font-size:16px"></i>
+          </div>
+          <div class="session-info">
+            <div class="session-name">تقرير أبريل 2025</div>
+            <div class="session-time">د. ماركوس ثورن — 30 أبريل</div>
+          </div>
+          <span class="badge badge-purple">جيد</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
