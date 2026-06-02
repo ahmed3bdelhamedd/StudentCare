@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Care — احجز جلسة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --teal-dark:   #0F6E56;
+      --purple:      #7F77DD;
+      --purple-light:#EEEDFE;
+      --purple-dark: #534AB7;
+      --bg:          #ffffff;
+      --bg-secondary:#F7F9F8;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --border:      rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--teal);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar-logo span { font-size: 16px; font-weight: 700; color: var(--teal-dark); }
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; margin: 2px 8px;
+      font-size: 14px; font-weight: 500;
+      color: var(--text-muted); border-radius: 8px;
+      cursor: pointer; text-decoration: none; transition: all 0.15s;
+    }
+    .nav-item:hover { background: var(--bg-secondary); color: var(--text); }
+    .nav-item.active { background: var(--teal-light); color: var(--teal-dark); }
+    .nav-item i { font-size: 18px; }
+    .nav-section {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      padding: 16px 16px 6px; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .user-row { display: flex; align-items: center; gap: 10px; }
+    .user-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--purple-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--purple-dark);
+    }
+    .user-name { font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: var(--text-muted); }
+    .logout-btn {
+      margin-right: auto; background: none; border: none;
+      color: var(--text-muted); cursor: pointer; font-size: 18px; padding: 4px;
+    }
+    .logout-btn:hover { color: #E65100; }
+
+    /* ── MAIN ── */
+    .main { padding: 28px; }
+    .page-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+    .grid { display: grid; grid-template-columns: 1fr 340px; gap: 16px; align-items: start; }
+
+    .card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-bottom: 16px;
+    }
+    .card:last-child { margin-bottom: 0; }
+    .card-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+
+    /* ── DOCTORS ── */
+    .doc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .doc-card {
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 14px; cursor: pointer; transition: all 0.15s;
+    }
+    .doc-card:hover { border-color: var(--teal); }
+    .doc-card.selected { border-color: var(--teal); background: var(--teal-light); }
+    .doc-av {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; margin-bottom: 10px;
+    }
+    .doc-name { font-size: 13px; font-weight: 600; }
+    .doc-spec { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .avail-dot {
+      display: inline-block; width: 7px; height: 7px;
+      border-radius: 50%; margin-right: 2px; vertical-align: middle;
+    }
+
+    /* ── CALENDAR ── */
+    .cal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .cal-header span { font-size: 14px; font-weight: 700; }
+    .cal-nav {
+      width: 30px; height: 30px; border: 1px solid var(--border);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; background: var(--bg); font-size: 16px; color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .cal-nav:hover { background: var(--teal-light); color: var(--teal-dark); }
+    .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; text-align: center; }
+    .cal-day-label { font-size: 11px; color: var(--text-muted); padding: 4px 0; font-weight: 600; }
+    .cal-day {
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      border-radius: 50%; font-size: 13px; cursor: pointer; margin: 0 auto;
+      transition: all 0.15s; position: relative;
+    }
+    .cal-day:hover { background: var(--teal-light); }
+    .cal-day.today { font-weight: 700; color: var(--teal-dark); }
+    .cal-day.selected { background: var(--teal); color: #fff; }
+    .cal-day.has-slot::after {
+      content: ''; width: 4px; height: 4px; border-radius: 50%;
+      background: var(--teal); position: absolute; bottom: 2px;
+      left: 50%; transform: translateX(-50%);
+    }
+    .cal-day.selected::after { background: #fff; }
+    .cal-day.empty { cursor: default; }
+    .cal-day.empty:hover { background: none; }
+
+    /* ── SLOTS ── */
+    .section-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+    .slots { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .slot-btn {
+      padding: 8px 4px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 12px; font-weight: 600;
+      text-align: center; cursor: pointer; color: var(--text-muted);
+      background: var(--bg); transition: all 0.15s; font-family: 'Cairo', sans-serif;
+    }
+    .slot-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
+    .slot-btn.selected { background: var(--teal); color: #fff; border-color: var(--teal); }
+    .slot-btn.busy { background: var(--bg-secondary); opacity: 0.5; cursor: not-allowed; }
+
+    /* ── SUMMARY ── */
+    .summary-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .summary-row:last-child { border: none; }
+    .summary-row i { color: var(--teal); font-size: 16px; flex-shrink: 0; }
+    .summary-label { color: var(--text-muted); }
+    .summary-val {
+      margin-right: auto; font-weight: 600; font-size: 12px;
+      color: var(--teal-dark); background: var(--teal-light);
+      padding: 2px 10px; border-radius: 12px;
+    }
+
+    .session-type { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+    .type-btn {
+      padding: 10px; border: 1px solid var(--border); border-radius: 8px;
+      font-size: 13px; font-weight: 600; text-align: center; cursor: pointer;
+      background: var(--bg); color: var(--text-muted);
+      font-family: 'Cairo', sans-serif; transition: all 0.15s;
+    }
+    .type-btn:hover { border-color: var(--teal); }
+    .type-btn.selected { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+    textarea {
+      width: 100%; padding: 10px; border: 1px solid var(--border);
+      border-radius: 8px; font-size: 13px; font-family: 'Cairo', sans-serif;
+      resize: none; height: 80px; color: var(--text); background: var(--bg);
+      outline: none; transition: border 0.15s;
+    }
+    textarea:focus { border-color: var(--teal); }
+
+    .btn-confirm {
+      width: 100%; padding: 12px; background: var(--teal); color: #fff;
+      border: none; border-radius: 8px; font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: 'Cairo', sans-serif; margin-top: 16px;
+      transition: background 0.15s;
+    }
+    .btn-confirm:hover { background: var(--teal-dark); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a class="sidebar-logo" href="index.html">
+      <div class="logo-icon"><i class="ti ti-brain" style="color:#fff;font-size:18px"></i></div>
+      <span>Student Care</span>
+    </a>
+    <div style="padding: 8px 0;">
+      <a class="nav-item" href="dashboard-student.html"><i class="ti ti-home"></i> الرئيسية</a>
+      <a class="nav-item" href="#"><i class="ti ti-calendar"></i> جلساتي</a>
+      <a class="nav-item active" href="book-session.html"><i class="ti ti-clock"></i> احجز موعد</a>
+      <a class="nav-item" href="#"><i class="ti ti-message"></i> الرسائل</a>
+      <div class="nav-section">أدوات</div>
+      <a class="nav-item" href="#"><i class="ti ti-heart"></i> تمارين اليقظة</a>
+      <a class="nav-item" href="#"><i class="ti ti-chart-bar"></i> تقدمي</a>
+      <a class="nav-item" href="#"><i class="ti ti-file-text"></i> تقاريري</a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-row">
+        <div class="user-av">أ م</div>
+        <div>
+          <div class="user-name">أحمد محمد</div>
+          <div class="user-role">طالب — هندسة</div>
+        </div>
+        <button class="logout-btn" onclick="window.location.href='login.html'">
+          <i class="ti ti-logout"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="page-title">احجز جلسة جديدة</div>
+    <div class="page-sub">اختار الدكتور والوقت المناسب ليك</div>
+
+    <div class="grid">
+      <div>
+        <!-- DOCTORS -->
+        <div class="card">
+          <div class="card-title">اختار الدكتور</div>
+          <div class="doc-grid">
+            <div class="doc-card selected" onclick="selectDoc(this)">
+              <div class="doc-av" style="background:var(--teal-light);color:var(--teal-dark)">س ج</div>
+              <div class="doc-name"><span class="avail-dot" style="background:var(--teal)"></span> د. سارة جينكينز</div>
+              <div class="doc-spec">أخصائية نفسية إكلينيكية</div>
+            </div>
+            <div class="doc-card" onclick="selectDoc(this)">
+              <div class="doc-av" style="background:var(--purple-light);color:var(--purple-dark)">م ث</div>
+              <div class="doc-name"><span class="avail-dot" style="background:var(--teal)"></span> د. ماركوس ثورن</div>
+              <div class="doc-spec">مستشار أول</div>
+            </div>
+            <div class="doc-card" onclick="selectDoc(this)">
+              <div class="doc-av" style="background:#E8F5E9;color:#2E7D32">إ ت</div>
+              <div class="doc-name"><span class="avail-dot" style="background:var(--teal)"></span> د. إيزابيلا تشين</div>
+              <div class="doc-spec">أخصائية سلوكية</div>
+            </div>
+            <div class="doc-card" onclick="selectDoc(this)">
+              <div class="doc-av" style="background:#FFF3E0;color:#E65100">ج ف</div>
+              <div class="doc-name"><span class="avail-dot" style="background:#E65100"></span> د. جوليان فانس</div>
+              <div class="doc-spec">مستشار أزمات</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CALENDAR -->
+        <div class="card">
+          <div class="card-title">اختار اليوم والوقت</div>
+          <div class="cal-header">
+            <div class="cal-nav">‹</div>
+            <span>يونيو 2025</span>
+            <div class="cal-nav">›</div>
+          </div>
+          <div class="cal-days">
+            <div class="cal-day-label">ح</div><div class="cal-day-label">ن</div><div class="cal-day-label">ث</div><div class="cal-day-label">ر</div><div class="cal-day-label">خ</div><div class="cal-day-label">ج</div><div class="cal-day-label">س</div>
+            <div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day empty"></div><div class="cal-day">1</div>
+            <div class="cal-day today has-slot" onclick="selectDay(this)">2</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">3</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">4</div>
+            <div class="cal-day selected has-slot" onclick="selectDay(this)">5</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">6</div>
+            <div class="cal-day" onclick="selectDay(this)">7</div>
+            <div class="cal-day" onclick="selectDay(this)">8</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">9</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">10</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">11</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">12</div>
+            <div class="cal-day has-slot" onclick="selectDay(this)">13</div>
+            <div class="cal-day" onclick="selectDay(this)">14</div>
+            <div class="cal-day" onclick="selectDay(this)">15</div>
+          </div>
+
+          <div style="margin-top:16px">
+            <div class="section-label">الأوقات المتاحة — الخميس 5 يونيو</div>
+            <div class="slots">
+              <div class="slot-btn busy">9:00 ص</div>
+              <div class="slot-btn selected" onclick="selectSlot(this)">10:00 ص</div>
+              <div class="slot-btn" onclick="selectSlot(this)">11:00 ص</div>
+              <div class="slot-btn" onclick="selectSlot(this)">12:00 م</div>
+              <div class="slot-btn busy">1:00 م</div>
+              <div class="slot-btn" onclick="selectSlot(this)">2:00 م</div>
+              <div class="slot-btn" onclick="selectSlot(this)">3:00 م</div>
+              <div class="slot-btn busy">4:00 م</div>
+              <div class="slot-btn" onclick="selectSlot(this)">5:00 م</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="card">
+        <div class="card-title">ملخص الحجز</div>
+        <div class="summary-row"><i class="ti ti-user"></i><span class="summary-label">الدكتور</span><span class="summary-val">د. سارة جينكينز</span></div>
+        <div class="summary-row"><i class="ti ti-calendar"></i><span class="summary-label">التاريخ</span><span class="summary-val">الخميس 5 يونيو</span></div>
+        <div class="summary-row"><i class="ti ti-clock"></i><span class="summary-label">الوقت</span><span class="summary-val">10:00 ص</span></div>
+        <div class="summary-row"><i class="ti ti-video"></i><span class="summary-label">النوع</span><span class="summary-val">أونلاين</span></div>
+        <div class="summary-row"><i class="ti ti-coin"></i><span class="summary-label">التكلفة</span><span class="summary-val">مجاني</span></div>
+
+        <div style="margin-top:16px">
+          <div class="section-label">نوع الجلسة</div>
+          <div class="session-type">
+            <button class="type-btn selected" onclick="selectType(this)"><i class="ti ti-video"></i> أونلاين</button>
+            <button class="type-btn" onclick="selectType(this)"><i class="ti ti-building"></i> حضوري</button>
+          </div>
+        </div>
+
+        <div style="margin-top:16px">
+          <div class="section-label">ملاحظة للدكتور (اختياري)</div>
+          <textarea placeholder="أي تفاصيل تريد إخبار الدكتور بها..."></textarea>
+        </div>
+
+        <button class="btn-confirm" onclick="window.location.href='dashboard-student.html'">
+          <i class="ti ti-check"></i> تأكيد الحجز
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function selectDoc(el) {
+    document.querySelectorAll('.doc-card').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function selectDay(el) {
+    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function selectSlot(el) {
+    if (el.classList.contains('busy')) return;
+    el.closest('.slots').querySelectorAll('.slot-btn').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+  function selectType(el) {
+    document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>
