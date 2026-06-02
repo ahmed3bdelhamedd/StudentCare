@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Care — تسجيل الدخول</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --teal-dark:   #0F6E56;
+      --purple:      #7F77DD;
+      --purple-light:#EEEDFE;
+      --purple-dark: #534AB7;
+      --bg:          #ffffff;
+      --bg-secondary:#F7F9F8;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --border:      rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      max-width: 900px;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+      min-height: 580px;
+    }
+
+    /* ── LEFT SIDE ── */
+    .left {
+      background: var(--teal-dark);
+      padding: 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .left-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .left-logo-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .left-logo span { color: #fff; font-size: 18px; font-weight: 700; }
+
+    .left-content h2 {
+      color: #fff; font-size: 26px; font-weight: 700;
+      line-height: 1.4; margin-bottom: 12px;
+    }
+    .left-content p {
+      color: rgba(255,255,255,0.75);
+      font-size: 14px; line-height: 1.8;
+    }
+
+    .left-stats { display: flex; gap: 24px; }
+    .left-stat .num { color: #fff; font-size: 22px; font-weight: 700; }
+    .left-stat .lbl { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
+
+    /* ── RIGHT SIDE ── */
+    .right {
+      background: var(--bg);
+      padding: 48px 40px;
+    }
+
+    .tabs {
+      display: flex;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .tab {
+      flex: 1; padding: 10px;
+      font-size: 14px; font-weight: 600;
+      text-align: center; cursor: pointer;
+      border: none; background: transparent;
+      color: var(--text-muted);
+      font-family: 'Cairo', sans-serif;
+      transition: all 0.15s;
+    }
+    .tab.active { background: var(--teal-dark); color: #fff; }
+
+    .form-section { display: none; }
+    .form-section.active { display: block; }
+
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block; font-size: 13px; font-weight: 600;
+      color: var(--text-muted); margin-bottom: 6px;
+    }
+    .form-group input {
+      width: 100%; padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px; font-family: 'Cairo', sans-serif;
+      color: var(--text); background: var(--bg);
+      transition: border 0.15s; outline: none;
+    }
+    .form-group input:focus { border-color: var(--teal); }
+
+    .input-icon { position: relative; }
+    .input-icon i {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted); font-size: 16px;
+      pointer-events: none;
+    }
+    .input-icon input { padding-left: 38px; }
+
+    .hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    .row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .remember { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); cursor: pointer; }
+    .remember input { width: auto; }
+    .forgot { font-size: 13px; color: var(--teal); text-decoration: none; }
+    .forgot:hover { color: var(--teal-dark); }
+
+    .btn-submit {
+      width: 100%; padding: 12px;
+      background: var(--teal); color: #fff;
+      border: none; border-radius: 8px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: 'Cairo', sans-serif;
+      transition: background 0.15s; margin-top: 8px;
+    }
+    .btn-submit:hover { background: var(--teal-dark); }
+
+    .role-select {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px; margin-bottom: 16px;
+    }
+    .role-btn {
+      padding: 10px 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px; text-align: center;
+      cursor: pointer; transition: all 0.15s;
+      background: var(--bg);
+    }
+    .role-btn:hover { border-color: var(--teal); }
+    .role-btn.selected { border-color: var(--teal); background: var(--teal-light); }
+    .role-btn i { display: block; font-size: 20px; color: var(--text-muted); margin-bottom: 4px; }
+    .role-btn.selected i { color: var(--teal-dark); }
+    .role-btn span { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .role-btn.selected span { color: var(--teal-dark); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .terms {
+      font-size: 12px; color: var(--text-muted);
+      text-align: center; margin-top: 12px;
+    }
+    .terms a { color: var(--teal); text-decoration: none; }
+
+    .back-home {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--text-muted);
+      text-decoration: none; margin-bottom: 20px;
+      transition: color 0.15s;
+    }
+    .back-home:hover { color: var(--teal-dark); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .page { grid-template-columns: 1fr; }
+      .left { display: none; }
+      .right { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+  <!-- LEFT -->
+  <div class="left">
+    <a class="left-logo" href="index.html">
+      <div class="left-logo-icon"><i class="ti ti-brain" style="color:#fff;font-size:20px"></i></div>
+      <span>Student Care</span>
+    </a>
+    <div class="left-content">
+      <h2>منصة الدعم النفسي لطلاب الجامعة</h2>
+      <p>سجل دخولك ببريدك الجامعي الرسمي للوصول لجلساتك وحجز مواعيد جديدة مع أخصائيين معتمدين.</p>
+    </div>
+    <div class="left-stats">
+      <div class="left-stat"><div class="num">500+</div><div class="lbl">طالب مسجل</div></div>
+      <div class="left-stat"><div class="num">20+</div><div class="lbl">دكتور متخصص</div></div>
+      <div class="left-stat"><div class="num">98%</div><div class="lbl">رضا الطلاب</div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <a class="back-home" href="index.html"><i class="ti ti-arrow-right"></i> الرئيسية</a>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login', this)">تسجيل الدخول</button>
+      <button class="tab" onclick="switchTab('register', this)">حساب جديد</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-form" class="form-section active">
+      <div class="form-group">
+        <label>البريد الإلكتروني الجامعي</label>
+        <div class="input-icon">
+          <i class="ti ti-mail"></i>
+          <input type="email" placeholder="example@university.edu.eg" dir="ltr" />
+        </div>
+        <div class="hint">استخدم بريدك الجامعي الرسمي فقط</div>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <div class="input-icon">
+          <i class="ti ti-lock"></i>
+          <input type="password" placeholder="••••••••" dir="ltr" />
+        </div>
+      </div>
+      <div class="row">
+        <label class="remember">
+          <input type="checkbox" /> تذكرني
+        </label>
+        <a class="forgot" href="#">نسيت كلمة المرور؟</a>
+      </div>
+      <button class="btn-submit" onclick="window.location.href='dashboard-student.html'">
+        دخول <i class="ti ti-arrow-left"></i>
+      </button>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="register-form" class="form-section">
+      <div style="margin-bottom:14px">
+        <div style="font-size:13px;font-weight:600;color:var(--text-muted);margin-bottom:8px">أنا...</div>
+        <div class="role-select">
+          <div class="role-btn selected" onclick="selectRole(this)">
+            <i class="ti ti-school"></i>
+            <span>طالب</span>
+          </div>
+          <div class="role-btn" onclick="selectRole(this)">
+            <i class="ti ti-stethoscope"></i>
+            <span>دكتور</span>
+          </div>
+          <div class="role-btn" onclick="selectRole(this)">
+            <i class="ti ti-building"></i>
+            <span>إدارة</span>
+          </div>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="form-group" style="margin-bottom:0">
+          <label>الاسم الأول</label>
+          <input type="text" placeholder="أحمد" />
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>الاسم الأخير</label>
+          <input type="text" placeholder="محمد" />
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:12px">
+        <label>البريد الجامعي</label>
+        <div class="input-icon">
+          <i class="ti ti-mail"></i>
+          <input type="email" placeholder="example@university.edu.eg" dir="ltr" />
+        </div>
+        <div class="hint">يجب أن ينتهي بـ .edu.eg</div>
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <div class="input-icon">
+          <i class="ti ti-lock"></i>
+          <input type="password" placeholder="8 أحرف على الأقل" dir="ltr" />
+        </div>
+      </div>
+      <button class="btn-submit" onclick="window.location.href='dashboard-student.html'">
+        إنشاء الحساب <i class="ti ti-arrow-left"></i>
+      </button>
+      <div class="terms">
+        بالتسجيل أنت توافق على <a href="#">سياسة الخصوصية</a> و <a href="#">شروط الاستخدام</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.form-section').forEach(s => s.classList.remove('active'));
+    document.getElementById(tab + '-form').classList.add('active');
+  }
+
+  function selectRole(el) {
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+</body>
+</html>
