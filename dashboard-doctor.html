@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Care — داشبورد الدكتور</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --teal-dark:   #0F6E56;
+      --purple:      #7F77DD;
+      --purple-light:#EEEDFE;
+      --purple-dark: #534AB7;
+      --bg:          #ffffff;
+      --bg-secondary:#F7F9F8;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --border:      rgba(0,0,0,0.08);
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg-secondary);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      position: sticky; top: 0; height: 100vh;
+      overflow-y: auto;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 10px;
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; background: var(--teal);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    }
+    .sidebar-logo span { font-size: 16px; font-weight: 700; color: var(--teal-dark); }
+
+    .doc-profile {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .doc-av {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--teal-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: var(--teal-dark);
+      margin-bottom: 10px;
+    }
+    .doc-name { font-size: 14px; font-weight: 700; }
+    .doc-spec { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .online-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600; color: var(--teal-dark);
+      background: var(--teal-light); padding: 3px 10px;
+      border-radius: 20px; margin-top: 8px;
+    }
+    .online-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; margin: 2px 8px;
+      font-size: 14px; font-weight: 500;
+      color: var(--text-muted); border-radius: 8px;
+      cursor: pointer; text-decoration: none; transition: all 0.15s;
+    }
+    .nav-item:hover { background: var(--bg-secondary); color: var(--text); }
+    .nav-item.active { background: var(--teal-light); color: var(--teal-dark); }
+    .nav-item i { font-size: 18px; }
+    .nav-section {
+      font-size: 11px; font-weight: 700; color: var(--text-muted);
+      padding: 16px 16px 6px; letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .sidebar-footer {
+      margin-top: auto; padding: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .logout-btn {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text-muted);
+      background: none; border: none; cursor: pointer;
+      font-family: 'Cairo', sans-serif; padding: 4px;
+      transition: color 0.15s;
+    }
+    .logout-btn:hover { color: #E65100; }
+
+    /* ── MAIN ── */
+    .main { padding: 28px; }
+    .top-bar {
+      display: flex; align-items: center;
+      justify-content: space-between; margin-bottom: 20px;
+    }
+    .top-bar h1 { font-size: 20px; font-weight: 700; }
+    .top-bar p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer; border: none; transition: all 0.15s;
+    }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-dark); }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 14px; margin-bottom: 20px;
+    }
+    .stat-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .stat-icon { font-size: 22px; margin-bottom: 10px; }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-val { font-size: 22px; font-weight: 700; }
+    .stat-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+    /* ── GRID ── */
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 14px; padding: 18px;
+    }
+    .card-title {
+      font-size: 15px; font-weight: 700; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-title a { font-size: 12px; color: var(--teal); text-decoration: none; cursor: pointer; }
+
+    /* ── STUDENT ITEMS ── */
+    .student-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .student-item:last-child { border: none; padding-bottom: 0; }
+    .st-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; flex-shrink: 0;
+    }
+    .st-name { font-size: 13px; font-weight: 600; }
+    .st-info { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── SESSION ROWS ── */
+    .session-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .session-row:last-child { border: none; padding-bottom: 0; }
+    .time-badge {
+      font-size: 11px; font-weight: 600; color: var(--teal-dark);
+      background: var(--teal-light); padding: 2px 10px;
+      border-radius: 12px; margin-right: auto;
+    }
+
+    /* ── BADGES ── */
+    .badge { font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600; }
+    .badge-green  { background: var(--teal-light);   color: var(--teal-dark); }
+    .badge-orange { background: #FFF3E0;              color: #E65100; }
+    .badge-purple { background: var(--purple-light);  color: var(--purple-dark); }
+    .badge-red    { background: #FEECEC;              color: #C0392B; }
+
+    /* ── REPORT BTNS ── */
+    .report-btn {
+      font-size: 11px; font-weight: 600;
+      padding: 4px 12px; border: 1px solid var(--border);
+      border-radius: 8px; cursor: pointer;
+      background: var(--bg); color: var(--text-muted);
+      font-family: 'Cairo', sans-serif; transition: all 0.15s;
+    }
+    .report-btn:hover { border-color: var(--teal); color: var(--teal-dark); }
+    .report-btn.urgent { border-color: #E65100; color: #E65100; }
+
+    /* ── PROGRESS ── */
+    .progress-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .progress-row:last-child { border: none; }
+    .progress-name { width: 60px; color: var(--text-muted); font-size: 12px; }
+    .progress-bar-wrap {
+      flex: 1; background: var(--bg-secondary);
+      border-radius: 4px; height: 8px; overflow: hidden;
+    }
+    .progress-bar { height: 100%; border-radius: 4px; }
+    .progress-val { font-size: 12px; font-weight: 600; color: var(--text-muted); width: 32px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <a class="sidebar-logo" href="index.html">
+      <div class="logo-icon"><i class="ti ti-brain" style="color:#fff;font-size:18px"></i></div>
+      <span>Student Care</span>
+    </a>
+
+    <div class="doc-profile">
+      <div class="doc-av">س ج</div>
+      <div class="doc-name">د. سارة جينكينز</div>
+      <div class="doc-spec">أخصائية نفسية إكلينيكية</div>
+      <div class="online-badge"><span class="online-dot"></span> متاحة الآن</div>
+    </div>
+
+    <div style="padding: 8px 0;">
+      <a class="nav-item active" href="dashboard-doctor.html"><i class="ti ti-home"></i> الرئيسية</a>
+      <a class="nav-item" href="#"><i class="ti ti-users"></i> طلابي</a>
+      <a class="nav-item" href="#"><i class="ti ti-calendar"></i> جدول الجلسات</a>
+      <a class="nav-item" href="#"><i class="ti ti-message"></i> الرسائل</a>
+      <div class="nav-section">التقارير</div>
+      <a class="nav-item" href="#"><i class="ti ti-file-plus"></i> كتابة تقرير</a>
+      <a class="nav-item" href="#"><i class="ti ti-chart-bar"></i> إحصائياتي</a>
+      <a class="nav-item" href="#"><i class="ti ti-send"></i> إرسال للجامعة</a>
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="window.location.href='login.html'">
+        <i class="ti ti-logout"></i> تسجيل الخروج
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="top-bar">
+      <div>
+        <h1>أهلاً د. سارة 👩‍⚕️</h1>
+        <p>الأحد، 1 يونيو 2025 — لديك 4 جلسات اليوم</p>
+      </div>
+      <button class="btn btn-primary">
+        <i class="ti ti-file-plus"></i> كتابة تقرير جديد
+      </button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-users" style="color:var(--teal)"></i></div>
+        <div class="stat-label">إجمالي الطلاب</div>
+        <div class="stat-val">24</div>
+        <div class="stat-sub">+3 هذا الشهر</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-calendar-check" style="color:var(--purple)"></i></div>
+        <div class="stat-label">جلسات اليوم</div>
+        <div class="stat-val">4</div>
+        <div class="stat-sub">الأولى 9:00 ص</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-file-text" style="color:#E65100"></i></div>
+        <div class="stat-label">تقارير معلقة</div>
+        <div class="stat-val">3</div>
+        <div class="stat-sub">تحتاج مراجعة</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="ti ti-star" style="color:var(--teal)"></i></div>
+        <div class="stat-label">معدل الرضا</div>
+        <div class="stat-val">4.9</div>
+        <div class="stat-sub">من 5 نجوم</div>
+      </div>
+    </div>
+
+    <!-- GRID -->
+    <div class="grid2">
+      <!-- جلسات اليوم -->
+      <div class="card">
+        <div class="card-title">جلسات اليوم <a href="#">عرض الكل</a></div>
+        <div class="session-row">
+          <div class="st-av" style="background:var(--teal-light);color:var(--teal-dark)">أ م</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">أحمد محمد</div>
+            <div style="font-size:11px;color:var(--text-muted)">هندسة — الجلسة الثامنة</div>
+          </div>
+          <div class="time-badge">9:00 ص</div>
+          <span class="badge badge-green">قادمة</span>
+        </div>
+        <div class="session-row">
+          <div class="st-av" style="background:var(--purple-light);color:var(--purple-dark)">س ع</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">سارة علي</div>
+            <div style="font-size:11px;color:var(--text-muted)">طب — الجلسة الثالثة</div>
+          </div>
+          <div class="time-badge">11:00 ص</div>
+          <span class="badge badge-green">قادمة</span>
+        </div>
+        <div class="session-row">
+          <div class="st-av" style="background:#E8F5E9;color:#2E7D32">م ك</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">محمد كمال</div>
+            <div style="font-size:11px;color:var(--text-muted)">تجارة — الجلسة الأولى</div>
+          </div>
+          <div class="time-badge">2:00 م</div>
+          <span class="badge badge-orange">بانتظار</span>
+        </div>
+        <div class="session-row">
+          <div class="st-av" style="background:#FFF3E0;color:#E65100">ن ح</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">نور حسن</div>
+            <div style="font-size:11px;color:var(--text-muted)">علوم — الجلسة الخامسة</div>
+          </div>
+          <div class="time-badge">4:00 م</div>
+          <span class="badge badge-orange">بانتظار</span>
+        </div>
+      </div>
+
+      <!-- حالة الطلاب -->
+      <div class="card">
+        <div class="card-title">حالة الطلاب <a href="#">عرض الكل</a></div>
+        <div class="student-item">
+          <div class="st-av" style="background:var(--teal-light);color:var(--teal-dark)">أ م</div>
+          <div style="flex:1"><div class="st-name">أحمد محمد</div><div class="st-info">8 جلسات — هندسة</div></div>
+          <span class="badge badge-green">مستقر</span>
+        </div>
+        <div class="student-item">
+          <div class="st-av" style="background:var(--purple-light);color:var(--purple-dark)">س ع</div>
+          <div style="flex:1"><div class="st-name">سارة علي</div><div class="st-info">3 جلسات — طب</div></div>
+          <span class="badge badge-purple">تحت المتابعة</span>
+        </div>
+        <div class="student-item">
+          <div class="st-av" style="background:#FFF3E0;color:#E65100">م ك</div>
+          <div style="flex:1"><div class="st-name">محمد كمال</div><div class="st-info">1 جلسة — تجارة</div></div>
+          <span class="badge badge-orange">جديد</span>
+        </div>
+        <div class="student-item">
+          <div class="st-av" style="background:#FEECEC;color:#C0392B">ن ح</div>
+          <div style="flex:1"><div class="st-name">نور حسن</div><div class="st-info">5 جلسات — علوم</div></div>
+          <span class="badge badge-red">يحتاج متابعة</span>
+        </div>
+      </div>
+
+      <!-- تقارير معلقة -->
+      <div class="card">
+        <div class="card-title">تقارير معلقة <a href="#">إرسال الكل</a></div>
+        <div class="session-row">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">أحمد محمد — مايو 2025</div>
+            <div style="font-size:11px;color:var(--text-muted)">آخر تحديث: أمس</div>
+          </div>
+          <button class="report-btn">إرسال</button>
+        </div>
+        <div class="session-row">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">سارة علي — مايو 2025</div>
+            <div style="font-size:11px;color:var(--text-muted)">آخر تحديث: 3 أيام</div>
+          </div>
+          <button class="report-btn">إرسال</button>
+        </div>
+        <div class="session-row">
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600">نور حسن — أبريل 2025</div>
+            <div style="font-size:11px;color:var(--text-muted)">آخر تحديث: أسبوع</div>
+          </div>
+          <button class="report-btn urgent">عاجل</button>
+        </div>
+      </div>
+
+      <!-- تقدم الطلاب -->
+      <div class="card">
+        <div class="card-title">تقدم الطلاب هذا الشهر</div>
+        <div class="progress-row">
+          <div class="progress-name">أحمد م</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:85%;background:var(--teal)"></div></div>
+          <div class="progress-val">85%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-name">سارة ع</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:60%;background:var(--purple)"></div></div>
+          <div class="progress-val">60%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-name">محمد ك</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:30%;background:#E65100"></div></div>
+          <div class="progress-val">30%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-name">نور ح</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:45%;background:#E65100"></div></div>
+          <div class="progress-val">45%</div>
+        </div>
+        <div class="progress-row">
+          <div class="progress-name">علي ص</div>
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:70%;background:var(--teal)"></div></div>
+          <div class="progress-val">70%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
