@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Care — استشارات نفسية جامعية آمنة</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:        #1D9E75;
+      --teal-light:  #E1F5EE;
+      --teal-dark:   #0F6E56;
+      --teal-mid:    #5DCAA5;
+      --purple:      #7F77DD;
+      --purple-light:#EEEDFE;
+      --purple-dark: #534AB7;
+      --bg:          #ffffff;
+      --bg-secondary:#F7F9F8;
+      --text:        #1a1a1a;
+      --text-muted:  #6b7280;
+      --border:      rgba(0,0,0,0.08);
+      --shadow:      0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 17px; font-weight: 700; color: var(--teal-dark);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 38px; height: 38px; border-radius: 10px;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon i { color: #fff; font-size: 20px; }
+    .nav-links {
+      display: flex; gap: 4px; list-style: none;
+    }
+    .nav-links a {
+      padding: 7px 14px; font-size: 14px; font-weight: 500;
+      color: var(--text-muted); border-radius: 8px;
+      text-decoration: none; transition: all 0.15s;
+    }
+    .nav-links a:hover { color: var(--teal-dark); background: var(--teal-light); }
+    .nav-links a.active { color: var(--teal-dark); background: var(--teal-light); }
+    .nav-actions { display: flex; gap: 8px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px; border-radius: 8px; font-size: 14px; font-weight: 600; font-family: 'Cairo', sans-serif; cursor: pointer; text-decoration: none; border: none; transition: all 0.15s; }
+    .btn-outline { background: transparent; color: var(--teal-dark); border: 1.5px solid var(--teal); }
+    .btn-outline:hover { background: var(--teal-light); }
+    .btn-primary { background: var(--teal); color: #fff; }
+    .btn-primary:hover { background: var(--teal-dark); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px; margin: 0 auto;
+      padding: 72px 32px 56px;
+      display: grid; grid-template-columns: 1fr 420px; gap: 48px; align-items: center;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--teal-light); color: var(--teal-dark);
+      font-size: 12px; font-weight: 600; padding: 5px 14px;
+      border-radius: 20px; margin-bottom: 18px; border: 1px solid var(--teal-mid);
+    }
+    .hero h1 {
+      font-size: 40px; font-weight: 700; line-height: 1.25;
+      margin-bottom: 14px;
+    }
+    .hero h1 .accent { color: var(--teal); }
+    .hero p { font-size: 16px; color: var(--text-muted); margin-bottom: 28px; line-height: 1.8; }
+    .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+    .stats { display: flex; gap: 28px; margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--border); }
+    .stat-num { font-size: 24px; font-weight: 700; color: var(--teal); }
+    .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    /* dashboard card */
+    .dashboard-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px; box-shadow: var(--shadow);
+    }
+    .dc-header {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 16px; margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+    }
+    .dc-name { font-size: 14px; font-weight: 600; }
+    .dc-sub  { font-size: 12px; color: var(--text-muted); }
+    .status-pill {
+      margin-right: auto; background: var(--teal-light); color: var(--teal-dark);
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+    }
+    .dc-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 0; border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .dc-row:last-child { border: none; }
+    .dc-row i { color: var(--teal); font-size: 16px; flex-shrink: 0; }
+    .dc-row .val { margin-right: auto; font-weight: 600; font-size: 12px; color: var(--teal-dark); background: var(--teal-light); padding: 2px 10px; border-radius: 12px; }
+    .dc-row .lbl { color: var(--text-muted); }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 56px 32px; }
+    .container { max-width: 1100px; margin: 0 auto; }
+    .section-tag { font-size: 12px; font-weight: 700; color: var(--teal); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+    .section-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+    .section-sub { font-size: 15px; color: var(--text-muted); max-width: 560px; }
+
+    /* ── FEATURES ── */
+    .features-section { background: var(--bg-secondary); }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+    .feature-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 14px; padding: 22px; transition: box-shadow 0.2s;
+    }
+    .feature-card:hover { box-shadow: var(--shadow); }
+    .feat-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; margin-bottom: 14px;
+    }
+    .feature-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── STEPS ── */
+    .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; position: relative; }
+    .steps-grid::before {
+      content: ''; position: absolute;
+      top: 22px; right: calc(12.5% + 18px); left: calc(12.5% + 18px);
+      height: 1px; background: var(--border);
+    }
+    .step { text-align: center; padding: 8px; }
+    .step-num {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--teal); color: #fff;
+      font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px; position: relative; z-index: 1;
+    }
+    .step h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+    .step p  { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── DOCTORS ── */
+    .doctors-section { background: var(--bg-secondary); }
+    .doctors-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 32px; }
+    .doctor-card {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; text-align: center;
+      transition: box-shadow 0.2s;
+    }
+    .doctor-card:hover { box-shadow: var(--shadow); }
+    .doc-avatar {
+      width: 56px; height: 56px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; margin: 0 auto 12px;
+    }
+    .doctor-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .doctor-card .spec { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+    .avail-badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 12px; border-radius: 20px; }
+    .avail { background: var(--teal-light); color: var(--teal-dark); }
+    .busy  { background: #FFF3E0; color: #E65100; }
+
+    /* ── FAQ ── */
+    .faq-list { margin-top: 32px; display: flex; flex-direction: column; gap: 10px; }
+    .faq-item {
+      background: #fff; border: 1px solid var(--border);
+      border-radius: 12px; overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; background: none; border: none; font-family: 'Cairo', sans-serif;
+      font-size: 14px; font-weight: 700; color: var(--text);
+      padding: 16px 20px; display: flex; justify-content: space-between;
+      align-items: center; cursor: pointer; text-align: right;
+    }
+    .faq-q i { color: var(--teal); transition: transform 0.2s; flex-shrink: 0; }
+    .faq-q.open i { transform: rotate(180deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.25s ease; }
+    .faq-a.open { max-height: 200px; }
+    .faq-a p { padding: 0 20px 16px; font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+
+    /* ── CTA ── */
+    .cta-section {
+      background: var(--teal); color: #fff; text-align: center; padding: 64px 32px;
+    }
+    .cta-section h2 { font-size: 30px; font-weight: 700; margin-bottom: 10px; }
+    .cta-section p  { font-size: 15px; opacity: 0.85; margin-bottom: 28px; }
+    .btn-white { background: #fff; color: var(--teal-dark); font-weight: 700; }
+    .btn-white:hover { background: var(--teal-light); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111; color: rgba(255,255,255,0.5);
+      padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 13px;
+    }
+    .footer-logo { color: #fff; font-weight: 700; font-size: 15px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .footer-links a:hover { color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 40px 16px; }
+      .dashboard-card { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps-grid { grid-template-columns: repeat(2, 1fr); }
+      .steps-grid::before { display: none; }
+      .doctors-grid { grid-template-columns: repeat(2, 1fr); }
+      section { padding: 40px 16px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-icon"><i class="ti ti-brain"></i></div>
+    Student Care
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">الرئيسية</a></li>
+    <li><a href="#features">مميزاتنا</a></li>
+    <li><a href="#steps">كيف يعمل</a></li>
+    <li><a href="#doctors">الأطباء</a></li>
+    <li><a href="#faq">الأسئلة الشائعة</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="login.html" class="btn btn-outline">تسجيل الدخول</a>
+    <a href="login.html" class="btn btn-primary">احجز جلسة</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="badge"><i class="ti ti-shield-check" style="font-size:13px"></i> سري وآمن 100%</div>
+    <h1>دعم نفسي <span class="accent">مجاني</span><br>لطلاب الجامعة</h1>
+    <p>منصة Student Care توفر استشارات نفسية احترافية وسرية لطلاب الجامعات. سجل ببريدك الجامعي واحجز جلستك الأولى مجاناً.</p>
+    <div class="hero-btns">
+      <a href="login.html" class="btn btn-primary"><i class="ti ti-calendar-plus"></i> احجز جلستك الآن</a>
+      <a href="#features" class="btn btn-outline">تعرف أكثر</a>
+    </div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">طالب مسجل</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">20+</div>
+        <div class="stat-label">دكتور متخصص</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">رضا الطلاب</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-card">
+    <div class="dc-header">
+      <div class="avatar" style="background:var(--purple-light);color:var(--purple-dark)">أ م</div>
+      <div>
+        <div class="dc-name">أحمد محمد</div>
+        <div class="dc-sub">طالب — كلية الهندسة</div>
+      </div>
+      <div class="status-pill">نشط</div>
+    </div>
+    <div class="dc-row"><i class="ti ti-calendar"></i><span class="lbl">الجلسة القادمة — د. سارة</span><span class="val">الأحد 10:00 ص</span></div>
+    <div class="dc-row"><i class="ti ti-file-text"></i><span class="lbl">آخر تقرير</span><span class="val">مستقر</span></div>
+    <div class="dc-row"><i class="ti ti-heart"></i><span class="lbl">توصية الدكتور</span><span class="val">تمرين يقظة</span></div>
+    <div class="dc-row"><i class="ti ti-message-circle"></i><span class="lbl">الدردشة</span><span class="val">متاح</span></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section" id="features">
+  <div class="container">
+    <div class="section-tag">ليه Student Care؟</div>
+    <div class="section-title">كل اللي محتاجه في مكان واحد</div>
+    <div class="section-sub">منصة متكاملة تربط الطالب بالمختص النفسي وإدارة الجامعة بطريقة سهلة وآمنة.</div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feat-icon" style="background:var(--teal-light)"><i class="ti ti-lock" style="color:var(--teal-dark)"></i></div>
+        <h3>سرية تامة</h3>
+        <p>كل بياناتك وجلساتك محمية بتشفير عالي المستوى ولا يطلع عليها أحد غيرك وغير الدكتور.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon" style="background:var(--purple-light)"><i class="ti ti-calendar" style="color:var(--purple-dark)"></i></div>
+        <h3>حجز سهل</h3>
+        <p>اختار الوقت المناسب من الجدول وتأكيد الحجز بضغطة واحدة بدون تعقيد.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon" style="background:#FFF3E0"><i class="ti ti-report" style="color:#E65100"></i></div>
+        <h3>تقارير متابعة</h3>
+        <p>الدكتور بيرسل تقارير دورية للجامعة لمتابعة تقدمك الأكاديمي والنفسي.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon" style="background:var(--teal-light)"><i class="ti ti-device-mobile" style="color:var(--teal-dark)"></i></div>
+        <h3>متاح على الموبايل</h3>
+        <p>استخدم المنصة من أي جهاز في أي وقت بدون قيود.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon" style="background:var(--purple-light)"><i class="ti ti-users" style="color:var(--purple-dark)"></i></div>
+        <h3>أطباء متخصصون</h3>
+        <p>فريق من أفضل الأخصائيين النفسيين المتخصصين في شؤون الطلاب.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feat-icon" style="background:#E8F5E9"><i class="ti ti-coin" style="color:#2E7D32"></i></div>
+        <h3>مجاني 100%</h3>
+        <p>كل الخدمات مجانية تماماً لطلاب الجامعة طول فترة دراستهم.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section id="steps">
+  <div class="container">
+    <div class="section-tag">إزاي بيشتغل النظام؟</div>
+    <div class="section-title">أربع خطوات بسيطة</div>
+    <div class="section-sub">من التسجيل لحد ما تبدأ جلستك في دقائق.</div>
+    <div class="steps-grid">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>سجل دخولك</h3>
+        <p>ببريدك الإلكتروني الجامعي الرسمي</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>اختار دكتورك</h3>
+        <p>من قائمة الأخصائيين المتاحين</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>احجز موعدك</h3>
+        <p>اختار الوقت المناسب ليك</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <h3>ابدأ جلستك</h3>
+        <p>اتكلم مع الدكتور بسرية تامة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCTORS -->
+<section class="doctors-section" id="doctors">
+  <div class="container">
+    <div class="section-tag">فريقنا</div>
+    <div class="section-title">الأطباء المتخصصون</div>
+    <div class="section-sub">أخصائيون نفسيون معتمدون ومتخصصون في دعم الطلاب.</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <div class="doc-avatar" style="background:var(--teal-light);color:var(--teal-dark)">س ج</div>
+        <h3>د. سارة جينكينز</h3>
+        <div class="spec">أخصائية نفسية إكلينيكية</div>
+        <span class="avail-badge avail">متاحة</span>
+      </div>
+      <div class="doctor-card">
+        <div class="doc-avatar" style="background:var(--purple-light);color:var(--purple-dark)">م ث</div>
+        <h3>د. ماركوس ثورن</h3>
+        <div class="spec">مستشار أول</div>
+        <span class="avail-badge avail">متاح</span>
+      </div>
+      <div class="doctor-card">
+        <div class="doc-avatar" style="background:#E8F5E9;color:#2E7D32">إ ت</div>
+        <h3>د. إيزابيلا تشين</h3>
+        <div class="spec">أخصائية سلوكية</div>
+        <span class="avail-badge avail">متاحة</span>
+      </div>
+      <div class="doctor-card">
+        <div class="doc-avatar" style="background:#FFF3E0;color:#E65100">ج ف</div>
+        <h3>د. جوليان فانس</h3>
+        <div class="spec">مستشار أزمات</div>
+        <span class="avail-badge busy">مشغول</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-tag">أسئلة شائعة</div>
+    <div class="section-title">عندك سؤال؟</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">إزاي أطلب جلسة استشارية؟ <i class="ti ti-chevron-down"></i></button>
+        <div class="faq-a"><p>سجل دخولك ببريدك الجامعي الرسمي، ثم اختار دكتور من القائمة واضغط احجز موعد. هتلاقي الأوقات المتاحة وتقدر تختار اللي يناسبك.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">هل بياناتي آمنة؟ <i class="ti ti-chevron-down"></i></button>
+        <div class="faq-a"><p>أيوه، كل البيانات والجلسات محمية بتشفير عالي المستوى. لا أحد يقدر يطلع على معلوماتك الشخصية غير الدكتور المسؤول عنك.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">هل الخدمة مجانية فعلاً؟ <i class="ti ti-chevron-down"></i></button>
+        <div class="faq-a"><p>أيوه 100% مجانية لطلاب الجامعة. كل اللي محتاجه هو بريدك الإلكتروني الجامعي الرسمي للتسجيل والوصول لكل الخدمات.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">هل أقدر أغير أو ألغي موعدي؟ <i class="ti ti-chevron-down"></i></button>
+        <div class="faq-a"><p>أيوه، تقدر تعدل أو تلغي موعدك من داشبورد الطالب في أي وقت قبل الجلسة بـ 24 ساعة على الأقل.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">إزاي بتوصل توصيات الدكتور للجامعة؟ <i class="ti ti-chevron-down"></i></button>
+        <div class="faq-a"><p>الدكتور بيكتب تقرير مختصر بعد كل جلسة بيتبعت بشكل آمن لإدارة الجامعة لمساعدتك أكاديمياً، من غير ما يكشف تفاصيل الجلسة الشخصية.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>مستنى إيه؟ ابدأ رحلتك دلوقتي</h2>
+  <p>سجل مجاناً ببريدك الجامعي واحجز جلستك الأولى</p>
+  <a href="login.html" class="btn btn-white"><i class="ti ti-arrow-left"></i> سجل دلوقتي — مجاناً</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Student Care</div>
+  <span>© 2025 Future Academy. جميع الحقوق محفوظة.</span>
+  <div class="footer-links">
+    <a href="#">سياسة الخصوصية</a>
+    <a href="#">تواصل معنا</a>
+    <a href="mailto:support@studentcare.edu">support@studentcare.edu</a>
+  </div>
+</footer>
+
+<script>
+  function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+    if (!isOpen) {
+      answer.classList.add('open');
+      btn.classList.add('open');
+    }
+  }
+
+  // smooth active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+    });
+    navLinks.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
